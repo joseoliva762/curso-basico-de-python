@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 def isPrime(numero):
     if numero < 2:
         return False
@@ -14,13 +15,13 @@ def isPrime(numero):
 
 
 def main():
-    numero = int(input('Escribe un numero: '))
+    numero = int(input('Escribe un número: '))
     result = isPrime(numero)
     if result == True:
         strResult = ' '
     else:
         strResult = ' No '
-    print('El numero {},{}es Primo.\r\n'.format(numero, strResult))
+    print('El número {},{}es Primo.\r\n'.format(numero, strResult))
 
 if __name__=='__main__':
     main()
