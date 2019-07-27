@@ -1,3 +1,4 @@
 *.jpg
 *.png
 /server/venv
+/web_scraping/venv
