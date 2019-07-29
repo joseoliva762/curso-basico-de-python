@@ -1,6 +1,8 @@
 from contact import Contact
+import csv
 
 class ContactBook:
+    FILE_NAME = 'contacts.csv'
     def __init__(self):
         self._contacts = []
         control_de_contacto_existente = False
@@ -8,7 +10,8 @@ class ContactBook:
     def add_contact(self, name, phone_number, e_mail):
         contact = Contact(name, phone_number, e_mail)
         self._contacts.append(contact)
-        print('name: {}, phone: {}, email: {}'.format(name, phone_number, e_mail))
+        self._save()
+        #print('name: {}, phone: {}, email: {}'.format(name, phone_number, e_mail))
 
     def show_all(self):
         for contact in self._contacts:
@@ -19,6 +22,7 @@ class ContactBook:
         for idx, contact in enumerate(self._contacts): #para iterar y que me devuelca el indice enumerate()
             if contact.name.lower() == name.lower():
                 del self._contacts[idx]
+                self._save()
                 print('\n\tEliminado Exitosamente\r\n')
                 control_de_contacto_existente = True
                 break
@@ -58,14 +62,22 @@ class ContactBook:
 
     def _select_data_to_update(self, contact):
         command = str(input('>Qué deseas hacer? \n\t >[nombre] del contacto.\n\t >[telefono] del contacto. \n\t >[correo] del contacto.\n ->Opcion: ')).lower()
-        if command == 'nombre':
+        if command == 'nombre'or command == 'n':
             contact.name = str(input('>Ingrese el nuevo nombre: '))
-        elif command == 'telefono':
+        elif command == 'telefono' or command == 't':
             contact.phone_number = str(input('>Ingrese el nuevo telefono: '))
-        elif command == 'correo':
+        elif command == 'correo' or command == 'c':
             contact.e_mail = str(input('>Ingrese el nuevo correo: '))
         else:
             self._not_found()
+        self._save()
+
+    def _save(self):
+        with open(ContactBook.FILE_NAME,'w') as file:
+            writer = csv.writer(file)
+            writer.writerow(('name', 'phone_number', 'e_mail'))
+            for contact in self._contacts:
+                writer.writerow((contact.name, contact.phone_number, contact.e_mail))
 
     def _print_contact(self, contact):
         print('--- * --- * --- * --- * --- * --- * --- * ---')

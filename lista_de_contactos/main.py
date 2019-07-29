@@ -1,6 +1,8 @@
 import os
+import csv
 from contact import Contact
 from contacts_book import ContactBook
+import os.path as path
 
 
 def continue_func():
@@ -14,6 +16,7 @@ def add_contact_func(contact_book):
     phone_number = str(input('\t>Telefono: '))
     e_mail = str(input('\t>Correo: '))
     contact_book.add_contact(name, phone_number, e_mail)
+    print('name: {}, phone: {}, email: {}'.format(name, phone_number, e_mail))
     continue_func()
 
 def list_contact_func(contact_book):
@@ -68,8 +71,7 @@ def command_input():
 
 
 
-def main(command):
-    contact_book = ContactBook()
+def main(command, contact_book):
     while True:
         if command == 'salir' or command == 's':
             break
@@ -77,5 +79,17 @@ def main(command):
         command = command_input()
 
 if __name__ == '__main__':
+    contact_book = ContactBook()
+    if path.exists(contact_book.FILE_NAME):
+        with open(contact_book.FILE_NAME,'r') as file:
+            reader = csv.reader(file)
+            for idx,row in enumerate(reader):
+                if idx != 0:
+                    try:
+                        contact_book.add_contact(row[0], row[1], row[2])
+                    except IndexError:
+                        continue
+                else:
+                    continue
     command = command_input()
-    main(command)
+    main(command, contact_book)
