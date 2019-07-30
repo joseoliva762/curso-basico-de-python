@@ -81,12 +81,12 @@ class ContactBook:
 
     def _print_contact(self, contact):
         print('--- * --- * --- * --- * --- * --- * --- * ---')
-        print('Nombre: {}'.format(contact.name))
+        print('Nombre:   {}'.format(contact.name))
         print('Teléfono: {}'.format(contact.phone_number))
-        print('Email: {}'.format(contact.e_mail))
+        print('Correo:   {}'.format(contact.e_mail))
         #print('--- * --- * --- * --- * --- * --- * --- * ---')
 
     def _not_found(self):
-        print('****************')
-        print(' No encontrado!')
-        print('****************')
+        print('\t****************')
+        print('\t No encontrado!')
+        print('\t****************')
