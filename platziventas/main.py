@@ -1,5 +1,25 @@
-
 import os
+import csv
+
+CLIENT_TABLE = ".clients.csv"
+CLIENT_SCHEMA = ['name', 'compañia', 'correo', 'posicion']
+
+def _initialize_client_form_storage(client_list):
+    with open(CLIENT_TABLE,'r') as file:
+        reader = csv.DictReader(file, fieldnames = CLIENT_SCHEMA)
+
+        for row in reader:
+            client_list.append(row)
+
+def _save_client_to_storage(client_list):
+    tmp_table_name = '{}.tmp'.format(CLIENT_TABLE)
+    with open(tmp_table_name,'w') as file:
+        writer = csv.DictWriter(file, fieldnames=CLIENT_SCHEMA)
+        writer.writerows(client_list)
+        os.remove(CLIENT_TABLE)
+        #file.close()
+    os.rename(tmp_table_name, CLIENT_TABLE)
+
 
 def create_client(client, client_list):
     if client not in client_list:
@@ -105,20 +125,20 @@ def _command_insert():
 def _command_select(command, client_list):
     os.system('clear')
     _print_welcome()
-    if command.lower() == 'crear' or command.lower() == 'c':    
+    if command.lower() == 'crear' or command.lower() == 'c':
         client = _client_data()
         if client != None:
             client_list = create_client(client, client_list)
-        list_client(client_list)
+        #list_client(client_list)
     elif command.lower() == 'eliminar' or command.lower() == 'e':
         client_name = _client_name()
         if client_name != None:
             client_list = delete_client(client_name, client_list)
-        list_client(client_list)
+        #list_client(client_list)
     elif command.lower() == 'actualizar' or command.lower() == 'a':
         client_name = _client_name()
         client_list = update_client(client_name, client_list)
-        list_client(client_list)
+        #list_client(client_list)
         #return client_list
     elif command.lower() == 'buscar' or command.lower() == 'b':
         client_name = _client_name()
@@ -165,28 +185,17 @@ def _adios_platzi_venta():
 
 #**********************************************************************************************************************************
 def main(client_list):
+    _initialize_client_form_storage(client_list)
     while True:
         os.system('clear')
         command = _command_insert()
         if _command_select(command, client_list) == False:
             break
+        _save_client_to_storage(client_list)
 #**********************************************************************************************************************************
 
 if __name__ == '__main__':
     os.system('clear')
-    client_list = [
-        {
-            'name': 'jose',
-            'compañia': 'Google',
-            'correo': 'jose@oliva.com',
-            'posicion': 'CEO',
-        },
-        {
-            'name': 'martin',
-            'compañia': 'facebook',
-            'correo': 'martin@quiroz.com',
-            'posicion': 'CTO',
-        }
-    ]
+    client_list = list()
     main(client_list)
     _adios_platzi_venta()
